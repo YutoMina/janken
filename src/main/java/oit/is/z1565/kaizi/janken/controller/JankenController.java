@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class JankenController {
-
+  // 直接URLをクリックする場合の処理機能
   @GetMapping("/janken")
   public String janken() {
     return "janken.html";
