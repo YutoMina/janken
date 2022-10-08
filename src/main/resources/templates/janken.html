@@ -3,6 +3,8 @@
 
 <head>
   <meta charset="utf-8">
+  <title>Janken GAME</title>
+
 </head>
 
 <body>
@@ -10,6 +12,7 @@
   <div th:if="${userName}">
     Hi [[${userName}]]
   </div>
+
   <a href="/janken/1">グー</a>
   <a href="/janken/2">チョキ</a>
   <a href="/janken/3">パー</a>
@@ -20,6 +23,7 @@
       結果：[[${result}]]
     </p>
   </div>
+
 </body>
 
 </html>
