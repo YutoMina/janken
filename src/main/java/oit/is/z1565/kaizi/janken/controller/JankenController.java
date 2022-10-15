@@ -10,26 +10,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class JankenController {
 
-
-  @GetMapping("/janken.html")
+  @GetMapping("/janken")
   public String janken() {
     return "janken.html";
   }
 
-  @GetMapping("/janken")
+  @GetMapping("/janken.html")
   public String janken2() {
-
     return "janken.html";
   }
 
   @PostMapping("/janken")
-
   public String jankenNamed(@RequestParam String username, ModelMap model) {
 
     model.addAttribute("userName", username);
     return "janken.html";
   }
-
 
   @GetMapping("janken/{param}")
   public String jankenFight(@PathVariable Integer param, ModelMap model) {
