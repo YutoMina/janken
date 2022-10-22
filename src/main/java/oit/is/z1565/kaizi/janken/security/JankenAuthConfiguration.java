@@ -28,8 +28,13 @@ public class JankenAuthConfiguration {
         .password("$2y$10$mBOeAjzP8BemBZla4DhjReuWvGdptU.uh9SH1BKoLL7Xhck40JJgG")
         .roles("USER")
         .build();
+    UserDetails user3 = users
+        .username("ほんだ")
+        .password("$2y$10$eZXzt49tjBYvAZnhvjKT1.CqtjiABm374Oyhqb/Cr51hebN/Q24le")
+        .roles("USER")
+        .build();
 
-    return new InMemoryUserDetailsManager(user1, user2);
+    return new InMemoryUserDetailsManager(user1, user2, user3);
   }
 
   @Bean
@@ -40,6 +45,10 @@ public class JankenAuthConfiguration {
         .mvcMatchers("/janken/**").authenticated();
 
     http.logout().logoutSuccessUrl("/");
+
+    http.csrf().disable();
+    http.headers().frameOptions().disable();
+    // ↑2行は実装時にコメントアウトする必要がある
     return http.build();
   }
 
