@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.springframework.org/schema/security">
 
 <head>
   <meta charset="utf-8">
@@ -11,17 +11,39 @@
   <div><a href="/logout">ログアウト</a></div>
   <h1>Janken GAME!</h1>
 
+  <div th:if="${loginUser}">
+    Hi [[${loginUser}]]
+  </div>
+
   <!--roomがあった場合にユーザ名を表示する-->
   <div th:if="${room}">
-    <p>エントリー</p>
+    <h1>エントリー</h1>
     <ul>
       <li th:each="user : ${room.users}">[[${user}]]</li>
     </ul>
   </div>
 
-  <div th:if="${userName}">
-    Hi [[${userName}]]
+  <div th:each="users1,stat:${DBusers}">
+    <tr>
+      <td>ID:[[${users1.id}]]</td>
+      <td>ユーザ名:[[${users1.userName}]]</td>
+    </tr>
   </div>
+
+  <p th:if="${DBmatches}">
+  <h1>試合結果</h1>
+  <div th:each="match1,stat:${DBmatches}">
+    <tr>
+      <td>ID:[[${match1.id}]]</td>
+      <td>user1:[[${match1.user1}]]</td>
+      <td>user2:[[${match1.user2}]]</td>
+      <td>user1の手:[[${match1.user1Hand}]]</td>
+      <td>user2の手:[[${match1.user2Hand}]]</td>
+    </tr>
+  </div>
+  </p>
+
+
 
   <a href="/janken/1">グー</a>
   <a href="/janken/2">チョキ</a>
