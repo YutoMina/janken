@@ -8,9 +8,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+//import org.springframework.web.bind.annotation.PathVariable;
+//import org.springframework.web.bind.annotation.PostMapping;
+//import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import oit.is.z1565.kaizi.janken.model.User;
@@ -29,7 +29,6 @@ public class JankenController {
   MatchMapper matchMapper;
 
   @GetMapping("/janken")
-  // @Transactional
   public String janken(Principal prin, ModelMap model) {
 
     String loginUser = prin.getName();
@@ -43,6 +42,46 @@ public class JankenController {
     model.addAttribute("loginUser", loginUser);
     return "janken.html";
 
+  }
+
+  @GetMapping("/match")
+  public String match(@RequestParam Integer id, Principal prin, ModelMap model) {
+    User enemyUser = userMapper.selectByUserId(id);
+    User matchUser = userMapper.selectByUserName(prin.getName());
+    model.addAttribute("enemyUser", enemyUser);
+    model.addAttribute("matchUser", matchUser);
+    return "match.html";
+  }
+
+  @GetMapping("/fight")
+  @Transactional
+  public String fight(@RequestParam Integer id, @RequestParam Integer hand, Principal prin, ModelMap model) {
+    Match result = new Match();
+    User matchUser = userMapper.selectByUserName(prin.getName());
+    User enemyUser = userMapper.selectByUserId(id);
+    String[] pose = { "Gu", "Choki", "Pa" };
+    int enemy = 3;
+
+    if (hand == enemy) {
+      model.addAttribute("result", "Draw!");
+    } else if ((hand % 3) + 1 == enemy) {
+      model.addAttribute("result", "You Win!");
+    } else {
+      model.addAttribute("result", "You Lose...");
+    }
+    model.addAttribute("user", pose[hand - 1]);
+    model.addAttribute("enemy", pose[enemy - 1]);
+
+    result.setUser1(matchUser.getId());
+    result.setUser2(id);
+    result.setUser1Hand(pose[hand - 1]);
+    result.setUser2Hand(pose[enemy - 1]);
+    matchMapper.insertMatch(result);
+
+    model.addAttribute("enemyUser", enemyUser);
+    model.addAttribute("matchUser", matchUser);
+
+    return "match.html";
   }
 
   /*
@@ -63,21 +102,21 @@ public class JankenController {
    * return "janken.html";
    * }
    */
-
-  @GetMapping("janken/{param}")
-  public String jankenFight(@PathVariable Integer param, ModelMap model) {
-    String[] pose = { "Gu", "Choki", "Pa" };
-    int enemy = 3;
-    if (param == enemy) {
-      model.addAttribute("result", "Draw!");
-    } else if ((param % 3) + 1 == enemy) {
-      model.addAttribute("result", "You Win!");
-    } else {
-      model.addAttribute("result", "You Lose...");
-    }
-    model.addAttribute("user", pose[param - 1]);
-    model.addAttribute("enemy", pose[enemy - 1]);
-    return "janken.html";
-  }
-
+  /*
+   * @GetMapping("janken/{param}")
+   * public String jankenFight(@PathVariable Integer param, ModelMap model) {
+   * String[] pose = { "Gu", "Choki", "Pa" };
+   * int enemy = 3;
+   * if (param == enemy) {
+   * model.addAttribute("result", "Draw!");
+   * } else if ((param % 3) + 1 == enemy) {
+   * model.addAttribute("result", "You Win!");
+   * } else {
+   * model.addAttribute("result", "You Lose...");
+   * }
+   * model.addAttribute("user", pose[param - 1]);
+   * model.addAttribute("enemy", pose[enemy - 1]);
+   * return "janken.html";
+   * }
+   */
 }
