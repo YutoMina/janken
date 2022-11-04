@@ -12,9 +12,9 @@
   <h1>Match</h1>
   <h1>[[${matchUser.userName}]] V.S. [[${enemyUser.userName}]]</h1>
 
-  <a th:href="@{/fight(id=${enemyUser.id},hand=1)}">グー</a>
-  <a th:href="@{/fight(id=${enemyUser.id},hand=2)}">チョキ</a>
-  <a th:href="@{/fight(id=${enemyUser.id},hand=3)}">パー</a>
+  <a th:href="@{/fight(id=${enemyUser.id},hand=0)}">グー</a>
+  <a th:href="@{/fight(id=${enemyUser.id},hand=1)}">チョキ</a>
+  <a th:href="@{/fight(id=${enemyUser.id},hand=2)}">パー</a>
 
   <div th:if="${result}">
     <p>
